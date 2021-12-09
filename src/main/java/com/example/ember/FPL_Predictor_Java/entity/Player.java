@@ -7,17 +7,28 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Player implements Serializable {
 
-    private Long code;
+    private int code;
     private String firstName;
     private String secondName;
 
-    private Long gwPoints;
-    private Long position;
-    private Long price;
+    private int gwPoints;
+    private int position;
+    private Float price;
     private String expectedPoints;
-    private Long team;
+    private int team;
 
-    public Player(Long code, String firstName, String secondName, Long gwPoints, Long position, Long price, String expectedPoints, Long team){
+    public Boolean getInDreamTeam() {
+        return inDreamTeam;
+    }
+
+    @JsonProperty("in_dreamteam")
+    public void setInDreamTeam(Boolean inDreamTeam) {
+        this.inDreamTeam = inDreamTeam;
+    }
+
+    private Boolean inDreamTeam;
+
+    public Player(int code, String firstName, String secondName, int gwPoints, int position, Float price, String expectedPoints, int team){
         this.code = code;
         this.firstName=firstName;
         this.secondName=secondName;
@@ -32,11 +43,11 @@ public class Player implements Serializable {
 
     }
 
-    public Long getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(Long code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -58,29 +69,30 @@ public class Player implements Serializable {
         this.secondName = secondName;
     }
 
-    public Long getGwPoints() {
+    public int getGwPoints() {
         return gwPoints;
     }
 
     @JsonProperty("event_points")
-    public void setGwPoints(Long gwPoints) {
+    public void setGwPoints(int gwPoints) {
         this.gwPoints = gwPoints;
     }
 
-    public Long getPosition() {
+    public int getPosition() {
         return position;
     }
 
-    public void setPosition(Long position) {
+    @JsonProperty("element_type")
+    public void setPosition(int position) {
         this.position = position;
     }
 
-    public Long getPrice() {
+    public Float getPrice() {
         return price;
     }
 
     @JsonProperty("now_cost")
-    public void setPrice(Long price) {
+    public void setPrice(Float price) {
         this.price = price / 10;
     }
 
@@ -93,11 +105,11 @@ public class Player implements Serializable {
         this.expectedPoints = expectedPoints;
     }
 
-    public Long getTeam() {
+    public int getTeam() {
         return team;
     }
 
-    public void setTeam(Long team) {
+    public void setTeam(int team) {
         this.team = team;
     }
 }

@@ -30,15 +30,27 @@
     </div>
     <table class="table table-striped table-bordered">
         <tr>
-            <td>Second Name</td>
-            <td>First Name</td>
             <td>Code</td>
+            <td>First Name</td>
+            <td>Second Name</td>
+            <td>Points</td>
+            <td>Price</td>
+            <td>Position</td>
+            <td>Expected Points</td>
 
         </tr>
         <tr th:each="player: ${players}">
-            <td th:text="${player.secondName}">Last Name</td>
-            <td th:text="${player.firstName}">First Name</td>
             <td th:text="${player.code}">Code</td>
+            <td th:text="${player.firstName}">First Name</td>
+            <td th:text="${player.secondName}">Last Name</td>
+            <td th:text="${player.gwPoints}">Points</td>
+            <td th:text="${player.price}">Price</td>
+            <td th:text="${player.position}">Position</td>
+            <td th:text="${player.expectedPoints}">Expected Points</td>
+
+
+
+
         </tr>
     </table>
 </div>

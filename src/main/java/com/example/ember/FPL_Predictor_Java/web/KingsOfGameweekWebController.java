@@ -29,20 +29,20 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 
 @Controller
-@RequestMapping("/dream_team")
-public class DreamTeamWebController {
+@RequestMapping("/kings_of_gameweek")
+public class KingsOfGameweekWebController {
 
     @Autowired
     private final FPLBootstrapService fplBootstrapService;
 
     @Autowired
-    public DreamTeamWebController( FPLBootstrapService fplBootstrapService) {
+    public KingsOfGameweekWebController( FPLBootstrapService fplBootstrapService) {
         this.fplBootstrapService = fplBootstrapService;
     }
 
     @GetMapping
     public String getPlayers(Model model) throws IOException {
-        List<Player> players = this.fplBootstrapService.getDreamTeam();
+        List<Player> players = this.fplBootstrapService.getKingsOfGameweek();
         model.addAttribute("players", players);
         return "players";
     }

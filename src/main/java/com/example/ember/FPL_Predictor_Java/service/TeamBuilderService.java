@@ -118,14 +118,14 @@ public class TeamBuilderService {
     }
 
     private String goalieCheck(){
-        if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()<Constants.MIN_GOALKEEPER){
+        if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()==Constants.MIN_GOALKEEPER){
+            return Constants.AT_MIN;
+        }
+        else if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()<Constants.MIN_GOALKEEPER){
             return Constants.UNDERLOADED;
         }
         else if(wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()>Constants.MAX_GOALKEEPER){
             return Constants.OVERLOADED;
-        }
-        else if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()==Constants.MIN_GOALKEEPER){
-            return Constants.AT_MIN;
         }
         else return Constants.OK;
     }
@@ -211,17 +211,17 @@ public class TeamBuilderService {
                 players.remove(player);
                 break;
             }
-            else if(player.getPosition() == Constants.DEFENDER && defenderCheck().equals(Constants.HAS_ROOM) ||defenderCheck().equals(Constants.AT_MIN)){
+            else if(player.getPosition() == Constants.DEFENDER && (defenderCheck().equals(Constants.HAS_ROOM) || defenderCheck().equals(Constants.AT_MIN))){
                 wildcardTeam.add(player);
                 players.remove(player);
                 break;
             }
-            else if(player.getPosition() == Constants.MIDFIELDER && midfielderCheck().equals(Constants.HAS_ROOM) || midfielderCheck().equals(Constants.AT_MIN)){
+            else if(player.getPosition() == Constants.MIDFIELDER && (midfielderCheck().equals(Constants.HAS_ROOM) || midfielderCheck().equals(Constants.AT_MIN))){
                 wildcardTeam.add(player);
                 players.remove(player);
                 break;
             }
-            else if(player.getPosition() == Constants.STRIKER && strikerCheck().equals(Constants.HAS_ROOM) || strikerCheck().equals(Constants.AT_MIN)){
+            else if(player.getPosition() == Constants.STRIKER && (strikerCheck().equals(Constants.HAS_ROOM) || strikerCheck().equals(Constants.AT_MIN))){
                 wildcardTeam.add(player);
                 players.remove(player);
                 break;
@@ -249,9 +249,13 @@ public class TeamBuilderService {
             int finalJ = j;
             while(this.wildcardTeam.stream().filter(o -> o.getTeam() == finalJ).mapToInt(Player::getTeam).count()>Constants.MAX_TEAM_MEMBERS) {
                 for(int i = wildcardTeam.size() - 1; i >= 0; i--) {
-                    if(wildcardTeam.get(i).getTeam()==j && !deduceCheck(wildcardTeam.get(i).getPosition()).equals(Constants.AT_MIN) && !deduceCheck(wildcardTeam.get(i).getPosition()).equals(Constants.UNDERLOADED)){
+                    if(wildcardTeam.get(i).getTeam()==j && !deduceCheck(wildcardTeam.get(i).getPosition()).equals(Constants.AT_MIN)){
                         wildcardTeam.remove(i);
                         addPlayer();
+                        break;
+                    }
+                    else if(wildcardTeam.get(i).getTeam()==j && deduceCheck(wildcardTeam.get(i).getPosition()).equals(Constants.AT_MIN)){
+                        swapPlayer(i, wildcardTeam.get(i).getPosition());
                         break;
                     }
                 }

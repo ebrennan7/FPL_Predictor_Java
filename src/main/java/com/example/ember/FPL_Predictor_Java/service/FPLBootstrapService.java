@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,8 +18,11 @@ import java.util.List;
 @Service
 public class FPLBootstrapService {
 
+    List<Player> team;
+
     @Autowired
-    public FPLBootstrapService() {
+    public FPLBootstrapService(List<Player> team) {
+        this.team=team;
     }
 
 
@@ -61,40 +65,50 @@ public class FPLBootstrapService {
 
     public List<Player> getKingsOfGameweek(){
         List<Player> bestPlayers = getPointsSortedPlayers();
-        List<Player> wildcardTeam = new ArrayList<>();
 
         for(int i=0;i< Constants.TEAM_SIZE;i++){
-            wildcardTeam.add(bestPlayers.get(0));
+            team.add(bestPlayers.get(0));
             bestPlayers.remove(bestPlayers.get(0));
         }
 
         bestPlayers.sort(Comparator.comparing(Player::getGwPoints).reversed().thenComparing(Player::getPrice));
 
-        TeamBuilderService teamBuilderService = new TeamBuilderService(wildcardTeam, bestPlayers);
+        TeamBuilderService teamBuilderService = new TeamBuilderService(team, bestPlayers);
 
-        wildcardTeam = teamBuilderService.buildTeam();
-        wildcardTeam.sort(Comparator.comparing(Player::getPosition));
+        team = teamBuilderService.buildTeam();
+        team.sort(Comparator.comparing(Player::getPosition));
+        getPlayerImages();
 
-        return wildcardTeam;
+        return team;
     }
 
     public List<Player> getWildcardTeam(){
         List<Player> bestPlayers = getExpectedPointsSortedPlayers();
-        List<Player> wildcardTeam = new ArrayList<>();
 
         for(int i=0;i< Constants.TEAM_SIZE;i++){
-            wildcardTeam.add(bestPlayers.get(0));
+            team.add(bestPlayers.get(0));
             bestPlayers.remove(bestPlayers.get(0));
         }
 
         bestPlayers.sort(Comparator.comparing(Player::getExpectedPoints).reversed().thenComparing(Player::getPrice));
 
-        TeamBuilderService teamBuilderService = new TeamBuilderService(wildcardTeam, bestPlayers, true);
+        TeamBuilderService teamBuilderService = new TeamBuilderService(team, bestPlayers, true);
 
-        wildcardTeam = teamBuilderService.buildTeam();
-        wildcardTeam.sort(Comparator.comparing(Player::getPosition));
+        team = teamBuilderService.buildTeam();
+        team.sort(Comparator.comparing(Player::getPosition));
+        getPlayerImages();
 
-        return wildcardTeam;
+        return team;
+
+    }
+
+    private void getPlayerImages(){
+        for(Player player:team){
+            String template = "https://resources.premierleague.com/premierleague/photos/players/110x140/p{0}.png";
+            String result = MessageFormat.format(template, String.valueOf(player.getCode()));
+            player.setImageURL(result);
+        }
+
 
     }
 

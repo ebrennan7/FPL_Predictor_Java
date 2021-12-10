@@ -16,6 +16,7 @@ public class Player implements Serializable {
     private Float price;
     private String expectedPoints;
     private int team;
+    private String imageURL;
 
     public Boolean getInDreamTeam() {
         return inDreamTeam;
@@ -27,6 +28,14 @@ public class Player implements Serializable {
     }
 
     private Boolean inDreamTeam;
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
     public Player(int code, String firstName, String secondName, int gwPoints, int position, Float price, String expectedPoints, int team){
         this.code = code;

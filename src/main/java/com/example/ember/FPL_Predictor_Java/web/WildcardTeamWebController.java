@@ -33,7 +33,7 @@ public class WildcardTeamWebController {
     @GetMapping
     public String getWildcardTeam(Model model) throws IOException {
         List<Player> players = this.fplBootstrapService.getWildcardTeam();
-        model.addAttribute("players", players);
-        return "players";
+        model.addAttribute("wildcard", players);
+        return "wildcard";
     }
 }

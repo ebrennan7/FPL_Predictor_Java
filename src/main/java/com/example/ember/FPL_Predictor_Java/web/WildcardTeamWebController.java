@@ -1,6 +1,7 @@
 package com.example.ember.FPL_Predictor_Java.web;
 
 import com.example.ember.FPL_Predictor_Java.entity.Player;
+import com.example.ember.FPL_Predictor_Java.repo.FPLBootstrapRepository;
 import com.example.ember.FPL_Predictor_Java.service.FPLBootstrapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -20,10 +21,6 @@ public class WildcardTeamWebController {
 
     @Autowired
     private final FPLBootstrapService fplBootstrapService;
-
-    HttpHeaders headers = new HttpHeaders();
-    HttpEntity<String> request = new HttpEntity<String>(headers);
-    RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
     public WildcardTeamWebController(FPLBootstrapService fplBootstrapService) {

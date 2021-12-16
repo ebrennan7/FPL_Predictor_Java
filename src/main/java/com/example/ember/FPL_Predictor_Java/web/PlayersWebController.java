@@ -1,15 +1,13 @@
 package com.example.ember.FPL_Predictor_Java.web;
 
 import com.example.ember.FPL_Predictor_Java.entity.Player;
+import com.example.ember.FPL_Predictor_Java.repo.FPLBootstrapRepository;
 import com.example.ember.FPL_Predictor_Java.service.FPLBootstrapService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.List;

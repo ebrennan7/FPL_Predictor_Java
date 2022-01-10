@@ -5,8 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <title>Players</title>
-
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/ui-darkness/jquery-ui.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/site.css"/>
@@ -20,7 +18,13 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">Landon Hotels</a>
+            <a class="navbar-brand" href="/wildcard">Wildcard Team</a>
+        </div>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/players">Players</a>
+        </div>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/kings_of_gameweek">Dream Team</a>
         </div>
     </div>
 </nav>
@@ -37,6 +41,7 @@
             <td>Price</td>
             <td>Position</td>
             <td>Expected Points</td>
+            <td>Selected By %</td>
 
         </tr>
         <tr th:each="player: ${wildcard}">
@@ -47,15 +52,19 @@
             <td th:text="${player.price}">Price</td>
             <td th:text="${player.position}">Position</td>
             <td th:text="${player.expectedPoints}">Expected Points</td>
+            <td th:text="${player.selectedBy}">Selected By %</td>
+
+
 
 <!--        <tr th:each="playerImage: ${}"}></tr>-->
+
     </table>
 </div>
 <footer class="footer navbar-inverse navbar-fixed-bottom">
     <div class="container">
         <div class="row">
             <div class="col-md-4"></div>
-            <div class="col-md-4"><p class="text-muted">@Copyright 2017 Ember Brennan</p></div>
+            <div class="col-md-4"><p class="text-muted">@Copyright 2022 Ember Brennan</p></div>
         </div>
     </div>
 </footer>

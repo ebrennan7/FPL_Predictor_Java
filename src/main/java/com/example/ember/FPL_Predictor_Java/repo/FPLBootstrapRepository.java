@@ -1,5 +1,6 @@
 package com.example.ember.FPL_Predictor_Java.repo;
 
+import com.example.ember.FPL_Predictor_Java.entity.Gameweek;
 import com.example.ember.FPL_Predictor_Java.entity.Player;
 import com.example.ember.FPL_Predictor_Java.entity.Response;
 import com.example.ember.FPL_Predictor_Java.service.TeamBuilderService;
@@ -25,13 +26,15 @@ public class FPLBootstrapRepository {
     public FPLBootstrapRepository() {
     }
 
-
-    HttpHeaders headers = new HttpHeaders();
-    HttpEntity<String> request = new HttpEntity<String>(headers);
     RestTemplate restTemplate = new RestTemplate();
 
     public List<Player> getAllPlayers(){
-        Response response = restTemplate.getForObject("https://fantasy.premierleague.com/api/bootstrap-static/", Response.class);
+        Response response = restTemplate.getForObject(Constants.BOOTSTRAP_URL, Response.class);
         return response.getElements();
+    }
+
+    public List<Gameweek> getGameweeks(){
+        Response response = restTemplate.getForObject(Constants.BOOTSTRAP_URL, Response.class);
+        return response.getEvents();
     }
 }

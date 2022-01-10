@@ -1,5 +1,6 @@
 package com.example.ember.FPL_Predictor_Java.service;
 
+import com.example.ember.FPL_Predictor_Java.entity.Gameweek;
 import com.example.ember.FPL_Predictor_Java.entity.Player;
 import com.example.ember.FPL_Predictor_Java.repo.FPLBootstrapRepository;
 import com.example.ember.FPL_Predictor_Java.utilities.Constants;
@@ -16,13 +17,16 @@ public class FPLBootstrapService {
 
     FPLBootstrapRepository fplBootstrapRepository;
 
+    PlayerImageService playerImageService;
+
     @Autowired
-    public FPLBootstrapService(FPLBootstrapRepository fplBootstrapRepository){
+    public FPLBootstrapService(FPLBootstrapRepository fplBootstrapRepository, PlayerImageService playerImageService){
         this.fplBootstrapRepository=fplBootstrapRepository;
+        this.playerImageService=playerImageService;
     }
 
     public List<Player> getAllPlayers(){
-        return getPlayerImages(fplBootstrapRepository.getAllPlayers());
+        return playerImageService.getPlayerImages(fplBootstrapRepository.getAllPlayers());
     }
 
 
@@ -35,8 +39,9 @@ public class FPLBootstrapService {
 
     private List<Player> getExpectedPointsSortedPlayers(){
         List<Player> allPlayers = fplBootstrapRepository.getAllPlayers();
-        allPlayers.sort(Comparator.comparing(Player::getExpectedPoints).reversed());
+//        allPlayers.sort(Comparator.comparing(Player::getSelectedBy*getExpectedPoints).reversed());
 
+        allPlayers.sort(Comparator.comparing((Player p)->p.getExpectedPoints()*p.getExpectedPoints()).reversed());
         return allPlayers;
     }
 
@@ -51,7 +56,7 @@ public class FPLBootstrapService {
         });
 
         dreamTeam.sort(Comparator.comparing(Player::getPosition));
-        return getPlayerImages(dreamTeam);
+        return playerImageService.getPlayerImages(dreamTeam);
     }
 
     public List<Player> getKingsOfGameweek(){
@@ -70,7 +75,7 @@ public class FPLBootstrapService {
         kingsOfGameweekTeam = teamBuilderService.buildTeam();
         kingsOfGameweekTeam.sort(Comparator.comparing(Player::getPosition));
 
-        return getPlayerImages(kingsOfGameweekTeam);
+        return playerImageService.getPlayerImages(kingsOfGameweekTeam);
     }
 
     public List<Player> getWildcardTeam(){
@@ -90,20 +95,7 @@ public class FPLBootstrapService {
         wildcardTeam.sort(Comparator.comparing(Player::getPosition));
 
 
-        return getPlayerImages(wildcardTeam);
+        return playerImageService.getPlayerImages(wildcardTeam);
 
     }
-
-    private List<Player> getPlayerImages(List<Player> team){
-        for(Player player:team){
-            String template = "https://resources.premierleague.com/premierleague/photos/players/110x140/p{0}.png";
-            String result = MessageFormat.format(template, String.valueOf(player.getCode()));
-            player.setImageURL(result);
-        }
-
-        return team;
-
-
-    }
-
 }

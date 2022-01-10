@@ -14,9 +14,24 @@ public class Player implements Serializable {
     private int gwPoints;
     private int position;
     private Float price;
-    private String expectedPoints;
+    private Float expectedPoints;
     private int team;
     private String imageURL;
+    private Float selectedBy;
+    private int id;
+
+    public int getId(){ return id; }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public Float getSelectedBy() { return selectedBy; }
+
+    @JsonProperty("selected_by_percent")
+    public void setSelectedBy(String selectedBy){
+        this.selectedBy=Float.parseFloat(selectedBy);
+    }
 
     public Boolean getInDreamTeam() {
         return inDreamTeam;
@@ -37,16 +52,16 @@ public class Player implements Serializable {
         this.imageURL = imageURL;
     }
 
-    public Player(int code, String firstName, String secondName, int gwPoints, int position, Float price, String expectedPoints, int team){
-        this.code = code;
-        this.firstName=firstName;
-        this.secondName=secondName;
-        this.gwPoints=gwPoints;
-        this.position=position;
-        this.price=price;
-        this.expectedPoints=expectedPoints;
-        this.team=team;
-    }
+//    public Player(int code, String firstName, String secondName, int gwPoints, int position, Float price, Float expectedPoints, int team){
+//        this.code = code;
+//        this.firstName=firstName;
+//        this.secondName=secondName;
+//        this.gwPoints=gwPoints;
+//        this.position=position;
+//        this.price=price;
+//        this.expectedPoints=expectedPoints;
+//        this.team=team;
+//    }
 
     protected Player(){
 
@@ -105,13 +120,13 @@ public class Player implements Serializable {
         this.price = price / 10;
     }
 
-    public String getExpectedPoints() {
+    public Float getExpectedPoints() {
         return expectedPoints;
     }
 
     @JsonProperty("ep_next")
     public void setExpectedPoints(String expectedPoints) {
-        this.expectedPoints = expectedPoints;
+        this.expectedPoints = Float.parseFloat(expectedPoints);
     }
 
     public int getTeam() {

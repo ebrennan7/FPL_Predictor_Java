@@ -263,5 +263,9 @@ public class TeamBuilderService {
         }
     }
 
+    private void priceCheck(){
+
+    }
+
 
 }

@@ -2,5 +2,20 @@
 <html lang="en">
 <body>
 Hello FPL
+<form>
+    <label for="teamId">FPL ID:</label>
+    <input type="text" id="teamId">
+    <button type="button" onclick="loadTeam(document.getElementById('teamId').value)">Submit</button>
+    <button type="button" onclick="loadTransfer(document.getElementById('teamId').value)">Transfer</button>
+</form>
+<script>
+         function loadTeam(teamId){
+            window.location = 'team/'+teamId;
+         }
+         function loadTransfer(teamId){
+            window.location = 'transfer/'+teamId;
+         }
+</script>
+
 </body>
 </html>

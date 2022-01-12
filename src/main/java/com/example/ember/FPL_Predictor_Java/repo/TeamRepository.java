@@ -27,4 +27,11 @@ public class TeamRepository {
         Response response = restTemplate.getForObject(url.toString(), Response.class);
         return response.getPicks();
     }
+
+    public int getUserBank(String userId, String gameweek){
+        StringBuilder url = new StringBuilder();
+        url.append(Constants.USER_TEAM_URL_PREFIX + userId + Constants.USER_TEAM_URL_EVENT_SUFFIX + gameweek + Constants.USER_TEAM_URL_PICKS_SUFFIX);
+        Response response = restTemplate.getForObject(url.toString(), Response.class);
+        return response.getBank();
+    }
 }

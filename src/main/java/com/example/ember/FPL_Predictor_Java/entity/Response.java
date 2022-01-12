@@ -18,6 +18,17 @@ public class Response implements Serializable {
     @JsonUnwrapped
     public List<Pick> picks;
 
+    public int getBank() {
+        return bank;
+    }
+
+    public void setBank(int bank) {
+        this.bank = bank;
+    }
+
+    @JsonUnwrapped
+    public int bank;
+
     public List<Pick> getPicks() {
         return picks;
     }

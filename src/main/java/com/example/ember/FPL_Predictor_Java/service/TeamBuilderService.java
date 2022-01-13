@@ -16,6 +16,7 @@ public class TeamBuilderService {
     List<Player> players;
     List<Player> wildcardTeam;
     Boolean teamProtection=false;
+    int teamAdjust = 0;
 
     @Autowired
     public TeamBuilderService(List<Player> wildcardTeam, List<Player> players) {
@@ -23,10 +24,11 @@ public class TeamBuilderService {
         this.wildcardTeam=wildcardTeam;
     }
 
-    public TeamBuilderService(List<Player> wildcardTeam, List<Player> players, Boolean teamProtection){
+    public TeamBuilderService(List<Player> wildcardTeam, List<Player> players, Boolean teamProtection, int teamAdjust){
         this.players=players;
         this.wildcardTeam=wildcardTeam;
         this.teamProtection=teamProtection;
+        this.teamAdjust=teamAdjust;
     }
 
     public List<Player> buildTeam(){
@@ -37,6 +39,8 @@ public class TeamBuilderService {
         if(teamProtection){
             teamOverloadProtection();
         }
+
+        priceCheck();
 
         return this.wildcardTeam;
     }
@@ -118,13 +122,13 @@ public class TeamBuilderService {
     }
 
     private String goalieCheck(){
-        if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()==Constants.MIN_GOALKEEPER){
+        if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()==Constants.MIN_GOALKEEPER + teamAdjust){
             return Constants.AT_MIN;
         }
-        else if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()<Constants.MIN_GOALKEEPER){
+        else if(this.wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()<Constants.MIN_GOALKEEPER + teamAdjust){
             return Constants.UNDERLOADED;
         }
-        else if(wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()>Constants.MAX_GOALKEEPER){
+        else if(wildcardTeam.stream().filter(o -> o.getPosition() == Constants.GOALKEEPER).mapToInt(Player::getPosition).count()>Constants.MAX_GOALKEEPER + teamAdjust){
             return Constants.OVERLOADED;
         }
         else return Constants.OK;
@@ -264,7 +268,10 @@ public class TeamBuilderService {
     }
 
     private void priceCheck(){
-
+        while(this.wildcardTeam.stream().mapToDouble(Player::getPrice).sum()>Constants.MAX_PRICE){
+            this.wildcardTeam.sort(Comparator.comparing(Player::getValueForMoney));
+            swapPlayer(0, this.wildcardTeam.get(0).getPosition());
+        }
     }
 
 

@@ -18,6 +18,9 @@ public final class Constants {
     public static final int MIN_STRIKER = 1;
 
     public static final int TEAM_SIZE = 11;
+    public static final int SQUAD_SIZE = 15;
+    public static final int FULL_SQUAD = 1;
+    public static final int REDUCED_TEAM = 0;
     public static final int MAX_TEAM_MEMBERS = 3;
     public static final int TOTAL_PL_TEAMS = 20;
     public static final int MAX_PRICE = 100;
@@ -27,6 +30,11 @@ public final class Constants {
     public static final String AT_MIN = "AT_MIN";
     public static final String HAS_ROOM = "HAS_ROOM";
     public static final String OK = "OK";
+    public static final Float MIN_GOALKEEPER_PRICE = 4.0f;
+    public static final Float MIN_DEFENDER_PRICE = 4.0f;
+    public static final Float MIN_MIDFIELDER_PRICE = 4.5f;
+    public static final Float MIN_STRIKER_PRICE = 4.5f;
+
 
     public static final String BOOTSTRAP_URL = "https://fantasy.premierleague.com/api/bootstrap-static/";
     public static final String USER_TEAM_URL_PREFIX = "https://fantasy.premierleague.com/api/entry/";

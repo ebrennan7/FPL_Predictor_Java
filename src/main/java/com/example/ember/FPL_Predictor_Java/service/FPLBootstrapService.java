@@ -45,6 +45,20 @@ public class FPLBootstrapService {
         return allPlayers;
     }
 
+    private List<Player> getAlgorithmSortedPlayers(){
+        List<Player> allPlayers = fplBootstrapRepository.getAllPlayers();
+
+        for(Player player:allPlayers){
+            Float weight = player.getExpectedPoints() * player.getGwPoints() * player.getSelectedBy();
+            Float valueForMoney = weight/player.getPrice();
+            player.setPerformanceWeight(weight);
+            player.setValueForMoney(valueForMoney);
+        }
+        allPlayers.sort(Comparator.comparing(Player::getPerformanceWeight).reversed());
+
+        return allPlayers;
+    }
+
     public List<Player> getDreamTeam(){
         List<Player> sortedPlayers = fplBootstrapRepository.getAllPlayers();
         List<Player> dreamTeam = new ArrayList<>();
@@ -89,10 +103,31 @@ public class FPLBootstrapService {
 
         bestPlayers.sort(Comparator.comparing(Player::getExpectedPoints).reversed().thenComparing(Player::getPrice));
 
-        TeamBuilderService teamBuilderService = new TeamBuilderService(wildcardTeam, bestPlayers, true);
+        TeamBuilderService teamBuilderService = new TeamBuilderService(wildcardTeam, bestPlayers, true, Constants.REDUCED_TEAM);
 
         wildcardTeam = teamBuilderService.buildTeam();
         wildcardTeam.sort(Comparator.comparing(Player::getPosition));
+
+
+        return playerImageService.getPlayerImages(wildcardTeam);
+
+    }
+
+    public List<Player> getStartTeam(){
+        List<Player> bestPlayers = getAlgorithmSortedPlayers();
+        List<Player> wildcardTeam = new ArrayList<>();
+
+        for(int i=0;i< Constants.SQUAD_SIZE;i++){
+            wildcardTeam.add(bestPlayers.get(0));
+            bestPlayers.remove(bestPlayers.get(0));
+        }
+
+        bestPlayers.sort(Comparator.comparing(Player::getSelectedBy).reversed().thenComparing(Player::getPrice));
+
+        TeamBuilderService teamBuilderService = new TeamBuilderService(wildcardTeam, bestPlayers, true, Constants.FULL_SQUAD);
+
+        wildcardTeam = teamBuilderService.buildTeam();
+        wildcardTeam.sort(Comparator.comparing(Player::getPerformanceWeight));
 
 
         return playerImageService.getPlayerImages(wildcardTeam);

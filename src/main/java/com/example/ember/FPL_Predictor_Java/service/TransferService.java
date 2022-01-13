@@ -50,61 +50,76 @@ public class TransferService {
         for(Pick pick:picks){
             for(Player player:allPlayers){
                 if(pick.getElement()==player.getId()){
+                    switch (player.getPosition()){
+                        case 1:
+                            player.setBenchFodder(player.getPrice() <= Constants.MIN_GOALKEEPER_PRICE);
+                        case 2:
+                            player.setBenchFodder(player.getPrice() <= Constants.MIN_DEFENDER_PRICE);
+                        case 3:
+                            player.setBenchFodder(player.getPrice() <= Constants.MIN_MIDFIELDER_PRICE);
+                        case 4:
+                            player.setBenchFodder(player.getPrice() <= Constants.MIN_STRIKER_PRICE);
+                        break;
+                    }
                     this.userTeam.add(player);
                 }
             }
         }
-        TreeMap<Float, Player> playerMap = new TreeMap<Float, Player>();
+
+        List<Player> transferOptions = new ArrayList<>();
 
         for(Player player:this.userTeam){
-            float weight;
             if(player.getGwPoints()==0){
-                weight = player.getExpectedPoints() * player.getSelectedBy();
+                player.setPerformanceWeight(player.getExpectedPoints() < 0 ? 0 : player.getExpectedPoints() * player.getSelectedBy());
             }
             else{
-                weight = player.getExpectedPoints() * player.getGwPoints() * player.getSelectedBy();
+                player.setPerformanceWeight(player.getExpectedPoints() < 0 ? 0 : player.getExpectedPoints() * player.getGwPoints() * player.getSelectedBy());
 
             }
-            if(weight==0 && player.getNews()==null){
-                weight += player.getSelectedBy()/10;
+            if(player.getPerformanceWeight()==0 && player.getNews()==null){
+                player.setPerformanceWeight(player.getSelectedBy()/10);
             }
-            if(weight==0 && player.getNews()!=null){
-                weight += 1/player.getSelectedBy();
+            if(player.getPerformanceWeight()==0 && player.getNews()!=null){
+                player.setPerformanceWeight(1/player.getSelectedBy());
             }
-            playerMap.put(weight, player);
+            if(!player.getBenchFodder()){
+                transferOptions.add(player);
+
+            }
 
         }
 
-        //Multiple 0's as key is causing problems
-        return playerMap.get(playerMap.firstKey());
+
+        transferOptions.sort(Comparator.comparing(Player::getPerformanceWeight));
+        return transferOptions.get(0);
 
     }
 
     private Player getIncomingPlayer(int position, Float price, int team, int bank){
         List<Player> allPlayers = fplBootstrapRepository.getAllPlayers();
-        TreeMap<Float, Player> playerMap = new TreeMap<Float, Player>();
+        Player incomingPlayer = null;
 
         allPlayers.removeIf(p -> p.getPosition() != position);
 
         for(Player player:allPlayers){
             Float weight = player.getExpectedPoints() * player.getGwPoints() * player.getSelectedBy();
-            playerMap.put(weight, player);
+            player.setPerformanceWeight(weight);
         }
-        for(Float key : playerMap.descendingKeySet()) {
-            Long c = this.userTeam.stream().filter(o -> o.getTeam() == playerMap.get(key).getTeam()).mapToInt(Player::getTeam).count();
-            if(this.userTeam.stream().noneMatch(o -> o.getId() == playerMap.get(key).getId()) && playerMap.get(key).getPrice() <= price - bank){
-                if(playerMap.get(key).getTeam()==team) {
-                    return playerMap.get(key);
+        allPlayers.sort(Comparator.comparing(Player::getPerformanceWeight));
+
+        for(Player player : allPlayers) {
+            if(this.userTeam.stream().noneMatch(o -> o.getId() == player.getId()) && player.getPrice() <= price - bank){
+                if(player.getTeam()==team) {
+                    incomingPlayer=player;
                 }
-                else if(this.userTeam.stream().filter(o -> o.getTeam() == playerMap.get(key).getTeam()).mapToInt(Player::getTeam).count()!=Constants.MAX_TEAM_MEMBERS)
+                else if(this.userTeam.stream().filter(o -> o.getTeam() == player.getTeam()).mapToInt(Player::getTeam).count()!=Constants.MAX_TEAM_MEMBERS)
                 {
-                    return playerMap.get(key);
+                    incomingPlayer=player;
 
                 }
             }
         }
 
-
-        return playerMap.get(playerMap.lastKey());
+        return incomingPlayer;
     }
 }

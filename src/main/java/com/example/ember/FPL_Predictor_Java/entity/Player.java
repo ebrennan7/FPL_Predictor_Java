@@ -20,9 +20,37 @@ public class Player implements Serializable {
     private Float selectedBy;
     private int id;
     private String news;
+    private Float performanceWeight;
+    private Float valueForMoney;
+
+    public Float getValueForMoney() {
+        return valueForMoney;
+    }
+
+    public void setValueForMoney(Float valueForMoney) {
+        this.valueForMoney = valueForMoney;
+    }
+
+    private Boolean benchFodder;
+
+    public Boolean getBenchFodder() {
+        return benchFodder;
+    }
+
+    public void setBenchFodder(Boolean benchFodder) {
+        this.benchFodder = benchFodder;
+    }
 
     public String getNews() {
         return news;
+    }
+
+    public Float getPerformanceWeight() {
+        return performanceWeight;
+    }
+
+    public void setPerformanceWeight(Float performanceWeight) {
+        this.performanceWeight = performanceWeight;
     }
 
     public void setNews(String news) {

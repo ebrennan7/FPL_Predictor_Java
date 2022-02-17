@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -37,10 +38,23 @@ public class UserPicksService {
         for(Pick pick:picks){
             for(Player player:allPlayers){
                 if(pick.getElement()==player.getId()){
+                    if(player.getGwPoints()!=0){
+                        Float weight = player.getExpectedPoints() * player.getGwPoints() * player.getSelectedBy();
+                        player.setPerformanceWeight(weight);
+
+                    }else{
+                        Float weight = player.getExpectedPoints() * player.getSelectedBy();
+                        player.setPerformanceWeight(weight);
+                    }
+
                     userTeam.add(player);
                 }
             }
         }
+
+
+        userTeam.sort(Comparator.comparing(Player::getPerformanceWeight).reversed());
+
 
         return playerImageService.getPlayerImages(userTeam);
     }

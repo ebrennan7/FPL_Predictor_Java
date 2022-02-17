@@ -108,7 +108,7 @@ public class TransferService {
         allPlayers.sort(Comparator.comparing(Player::getPerformanceWeight));
 
         for(Player player : allPlayers) {
-            if(this.userTeam.stream().noneMatch(o -> o.getId() == player.getId()) && player.getPrice() <= price - bank){
+            if(this.userTeam.stream().noneMatch(o -> o.getId() == player.getId()) && player.getPrice() <= price + bank){
                 if(player.getTeam()==team) {
                     incomingPlayer=player;
                 }

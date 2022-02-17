@@ -1,5 +1,6 @@
 package com.example.ember.FPL_Predictor_Java.repo;
 
+import com.example.ember.FPL_Predictor_Java.entity.EntryHistory;
 import com.example.ember.FPL_Predictor_Java.entity.Pick;
 import com.example.ember.FPL_Predictor_Java.entity.Player;
 import com.example.ember.FPL_Predictor_Java.entity.Response;
@@ -32,6 +33,6 @@ public class TeamRepository {
         StringBuilder url = new StringBuilder();
         url.append(Constants.USER_TEAM_URL_PREFIX + userId + Constants.USER_TEAM_URL_EVENT_SUFFIX + gameweek + Constants.USER_TEAM_URL_PICKS_SUFFIX);
         Response response = restTemplate.getForObject(url.toString(), Response.class);
-        return response.getBank();
+        return response.getEntryHistory().getBank();
     }
 }

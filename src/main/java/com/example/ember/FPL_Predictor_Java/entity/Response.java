@@ -1,6 +1,7 @@
 package com.example.ember.FPL_Predictor_Java.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 import java.io.Serializable;
@@ -18,16 +19,7 @@ public class Response implements Serializable {
     @JsonUnwrapped
     public List<Pick> picks;
 
-    public int getBank() {
-        return bank;
-    }
-
-    public void setBank(int bank) {
-        this.bank = bank;
-    }
-
-    @JsonUnwrapped
-    public int bank;
+    public EntryHistory entryHistory;
 
     public List<Pick> getPicks() {
         return picks;
@@ -51,6 +43,15 @@ public class Response implements Serializable {
 
     public void setEvents(List<Gameweek> events) {
         this.events = events;
+    }
+
+    public EntryHistory getEntryHistory() {
+        return entryHistory;
+    }
+
+    @JsonProperty("entry_history")
+    public void setEntryHistory(EntryHistory entryHistory) {
+        this.entryHistory = entryHistory;
     }
 
 }

@@ -28,8 +28,8 @@ public class TransferWebController {
     @GetMapping(path = "/{userId}")
     public String getTeamForUser(@PathVariable(required=true,name="userId") String userId, Model model) throws IOException {
 
-        List<Player> players = this.transferService.getTransfer(userId);
-        model.addAttribute("team", players);
-        return "team";
+        List<Player> transfer = this.transferService.getTransfer(userId);
+        model.addAttribute("transfer", transfer);
+        return "transfer";
     }
 }
